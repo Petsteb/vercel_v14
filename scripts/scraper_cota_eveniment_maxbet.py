@@ -32,7 +32,7 @@ def scrape_odds(string_data: str, team_name1: str, team_name2: str, scroll_pause
     caută un meci cu data și echipele specificate; dacă e găsit, îl salvează în CSV.
     """
     # inițializează CSV-ul de output
-    output_file = 'odds.csv'
+    output_file = 'odds_maxbet.csv'
     init_csv(output_file)
 
     url = "https://www.maxbet.ro/ro/pariuri-sportive?sport=2"
@@ -47,7 +47,7 @@ def scrape_odds(string_data: str, team_name1: str, team_name2: str, scroll_pause
     wait = WebDriverWait(driver, 20)
 
     try:
-        print(f"🌐 Deschid pagina: {url}")
+        print(f"Deschid pagina: {url}")
         driver.get(url)
 
         # Închide pop-up notificări interne
@@ -97,7 +97,7 @@ def scrape_odds(string_data: str, team_name1: str, team_name2: str, scroll_pause
         # Găsește evenimentele
         wait.until(EC.presence_of_element_located((By.TAG_NAME, 'event')))
         matches = driver.find_elements(By.TAG_NAME, 'event')
-        print(f"🔍 Găsite {len(matches)} evenimente")
+        print(f"Gasite {len(matches)} evenimente")
 
         # Parcurge fiecare meci
         for idx, match in enumerate(matches, start=1):
@@ -127,12 +127,12 @@ def scrape_odds(string_data: str, team_name1: str, team_name2: str, scroll_pause
             if (formatted_dt == string_data
                     and team1.lower() == team_name1.lower()
                     and team2.lower() == team_name2.lower()):
-                print(f"⚽ Meci găsit: {team1} vs {team2} la {formatted_dt} "
+                print(f"Meci gasit: {team1} vs {team2} la {formatted_dt} "
                       f"cu cote: 1={c1}  X={cX}  2={c2}")
                 write_match_to_csv(output_file, formatted_dt, team1, team2, odds)
                 return  # oprește căutarea după primul meci găsit
 
-        print("Niciun meci nu a îndeplinit condițiile.")
+        print("Niciun meci nu a indeplinit conditiile.")
 
     finally:
         driver.quit()

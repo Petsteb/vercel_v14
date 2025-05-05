@@ -10,11 +10,11 @@ def ensure_dependencies():
     try:
         import selenium
         from selenium import webdriver
-        print("✅ Selenium is already installed")
+        print("Selenium is already installed")
     except ImportError:
-        print("⚠️ Installing Selenium...")
+        print("Installing Selenium...")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "selenium"])
-        print("✅ Selenium installed successfully")
+        print("Selenium installed successfully")
     
     try:
         # Check if Chrome WebDriver is available
@@ -23,9 +23,9 @@ def ensure_dependencies():
         options.add_argument('--headless')
         driver = webdriver.Chrome(options=options)
         driver.quit()
-        print("✅ Chrome WebDriver is working")
+        print("Chrome WebDriver is working")
     except Exception as e:
-        print(f"⚠️ Chrome WebDriver issue: {e}")
+        print(f"Chrome WebDriver issue: {e}")
         print("Please ensure Chrome and ChromeDriver are installed and compatible")
         
     # Additional dependencies
@@ -33,9 +33,9 @@ def ensure_dependencies():
         import csv
         import re
         from datetime import datetime
-        print("✅ Standard libraries available")
+        print("Standard libraries available")
     except ImportError as e:
-        print(f"⚠️ Missing standard library: {e}")
+        print(f"Missing standard library: {e}")
 
 def get_script_dir():
     """
@@ -53,9 +53,9 @@ def clean_output_files():
         if os.path.exists(file_path):
             try:
                 os.remove(file_path)
-                print(f"✅ Removed old output file: {file}")
+                print(f"Removed old output file: {file}")
             except Exception as e:
-                print(f"⚠️ Could not remove {file}: {e}")
+                print(f"Could not remove {file}: {e}")
 
 if __name__ == "__main__":
     ensure_dependencies()

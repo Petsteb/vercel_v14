@@ -50,6 +50,7 @@ export function ExpandableMatchRow({ match, isPreview = false }: ExpandableMatch
   }
 
   // Update the fetchOdds function with better error handling
+  // In expandable-match-row.tsx, update the fetchOdds function:
   const fetchOdds = async () => {
     try {
       setLoading(true)
@@ -61,34 +62,36 @@ export function ExpandableMatchRow({ match, isPreview = false }: ExpandableMatch
         return
       }
 
-      // If we have no match ID, use sample data
-      if (!match.id) {
-        setOdds(SAMPLE_ODDS)
-        return
+      // Call our new endpoint that runs all scrapers
+      const response = await fetch("/api/odds/fetch-all", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          team1: match.team1,
+          team2: match.team2,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch odds")
       }
 
-      try {
-        const response = await fetch(`/api/odds/${match.id}`)
+      const data = await response.json()
 
-        // Check if the response is OK
-        if (!response.ok) {
-          throw new Error(`API returned status ${response.status}`)
-        }
-
-        // Try to parse the JSON
-        const data = await response.json()
-        setOdds(data.odds || SAMPLE_ODDS)
-      } catch (apiError) {
-        console.error("API error:", apiError)
-        // Fall back to sample data
+      if (data.success && data.odds && data.odds.length > 0) {
+        setOdds(data.odds)
+      } else {
+        // If no odds found, use sample data as fallback
         setOdds(SAMPLE_ODDS)
-        setError("Could not fetch odds. Using sample data instead.")
+        setError("No odds found for this match. Using sample data.")
       }
     } catch (error) {
-      console.error("Error in fetchOdds:", error)
+      console.error("Error fetching odds:", error)
+      setError("Failed to fetch odds. Using sample data.")
       // Ultimate fallback
       setOdds(SAMPLE_ODDS)
-      setError("An unexpected error occurred. Using sample odds data.")
     } finally {
       setLoading(false)
     }

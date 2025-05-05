@@ -40,8 +40,8 @@ export async function POST(request: NextRequest) {
     const formattedDate = `${today.getDate().toString().padStart(2, "0")}/${(today.getMonth() + 1).toString().padStart(2, "0")}/${today.getFullYear()} ${today.getHours().toString().padStart(2, "0")}:${today.getMinutes().toString().padStart(2, "0")}`
 
     // Execute the scraper directly
-    const scriptPath = path.join(process.cwd(), "scripts/script_cautare_meci_spin.py")
-    const outputFile = path.join(process.cwd(), "meciuri.csv")
+    const scriptPath = path.join(process.cwd(), "scripts", "script_cautare_meci_spin.py");
+    const outputFile = path.join(process.cwd(), "odds_spin.csv")
 
     // First, ensure Python dependencies are installed
     try {
@@ -52,8 +52,7 @@ export async function POST(request: NextRequest) {
 
     // Run the scraper
     console.log(`Executing Spin.ro odds scraper for ${team1} vs ${team2}`)
-    const { stdout, stderr } = await execAsync(`python ${scriptPath} "${team1}" "${team2}" "${formattedDate}"`)
-
+    const { stdout, stderr } = await execAsync(`python "${scriptPath}" "${team1}" "${team2}" "${formattedDate}"`);
     if (stderr) {
       console.error(`Scraper error: ${stderr}`)
     }

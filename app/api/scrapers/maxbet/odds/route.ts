@@ -40,8 +40,8 @@ export async function POST(request: NextRequest) {
     const formattedDate = `${today.getDate().toString().padStart(2, "0")}/${(today.getMonth() + 1).toString().padStart(2, "0")}`
 
     // Execute the scraper directly
-    const scriptPath = path.join(process.cwd(), "scripts/scraper_cota_eveniment_maxbet.py")
-    const outputFile = path.join(process.cwd(), "odds.csv")
+    const scriptPath = path.join(process.cwd(), "scripts", "scraper_cota_eveniment_maxbet.py");
+    const outputFile = path.join(process.cwd(), "odds_maxbet.csv")
 
     // First, ensure Python dependencies are installed
     try {
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
 
     // Run the scraper
     console.log(`Executing MaxBet odds scraper for ${team1} vs ${team2}`)
-    const { stdout, stderr } = await execAsync(`python ${scriptPath} "${formattedDate}" "${team1}" "${team2}"`)
+    const { stdout, stderr } = await execAsync(`python "${scriptPath}" "${formattedDate}" "${team1}" "${team2}"`);
 
     if (stderr) {
       console.error(`Scraper error: ${stderr}`)

@@ -6,7 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-def scrape_odds(var1: str, var2: str, output_csv: str = 'odds.csv'):
+def scrape_odds(var1: str, var2: str, output_csv: str = 'odds_superbet.csv'):
     # 1) Encode var1 (spații → %20)
     query = quote(var1)
     url = f"https://superbet.ro/cautare?query={query}"

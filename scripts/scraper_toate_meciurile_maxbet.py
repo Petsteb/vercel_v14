@@ -32,7 +32,7 @@ def scrape_odds(output_csv: str = 'maxbet_meciuri.csv', scroll_pause: float = 1.
     wait = WebDriverWait(driver, 20)
 
     try:
-        print(f"🌐 Deschid pagina: {url}")
+        print(f"Deschid pagina: {url}")
         driver.get(url)
 
         # Închide pop-up-uri și acceptă cookies
@@ -80,7 +80,7 @@ def scrape_odds(output_csv: str = 'maxbet_meciuri.csv', scroll_pause: float = 1.
             time.sleep(scroll_pause)
             new_height = driver.execute_script("return document.body.scrollHeight")
             if new_height == last_height:
-                print(f"🔄 Conținut complet încărcat după {scroll_count} scroll-uri.")
+                print(f"Conținut complet încărcat după {scroll_count} scroll-uri.")
                 break
             last_height = new_height
             scroll_count += 1
@@ -90,7 +90,7 @@ def scrape_odds(output_csv: str = 'maxbet_meciuri.csv', scroll_pause: float = 1.
         # Așteaptă apare evenimentele
         wait.until(EC.presence_of_element_located((By.TAG_NAME, 'event')))
         matches = driver.find_elements(By.TAG_NAME, 'event')
-        print(f"🔍 Găsite {len(matches)} evenimente de fotbal după scroll")
+        print(f"Găsite {len(matches)} evenimente de fotbal după scroll")
 
         # Scrie CSV
         with open(csv_path, 'w', newline='', encoding='utf-8') as f:

@@ -10,6 +10,43 @@ const execAsync = promisify(exec)
 
 export async function POST(request: NextRequest) {
   try {
+
+    const outputFiles = [
+      path.join(process.cwd(), "odds_superbet.csv"),
+      path.join(process.cwd(), "odds_maxbet.csv"),
+      path.join(process.cwd(), "odds_spin.csv"),
+    ];
+
+    // Combined output file
+    const combinedFile = path.join(process.cwd(), "odds.csv");
+
+    // Create combined file with header
+    fs.writeFileSync(combinedFile, "Data,team1,team2,odd_1,odd_X,odd_2,bookmaker\n");
+
+    // Append data from each file with bookmaker info
+    outputFiles.forEach((file, index) => {
+      if (fs.existsSync(file)) {
+        const content = fs.readFileSync(file, "utf8");
+        const bookmaker = ["superbet", "maxbet", "spin"][index];
+
+        // Skip header line, add bookmaker column
+        const lines = content.split("\n").slice(1).filter(Boolean);
+        lines.forEach(line => {
+          fs.appendFileSync(combinedFile, `${line},${bookmaker}\n`);
+        });
+
+        // Delete the temporary file
+        fs.unlinkSync(file);
+      }
+    });
+
+    // Read the combined odds file
+    let odds = [];
+    if (fs.existsSync(combinedFile)) {
+      const content = fs.readFileSync(combinedFile, "utf8");
+      odds = parse(content, { columns: true });
+    }
+
     const supabase = createServerSupabaseClient()
 
     // Verify admin user

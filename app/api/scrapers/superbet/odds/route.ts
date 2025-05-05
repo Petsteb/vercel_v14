@@ -36,8 +36,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Execute the scraper directly
-    const scriptPath = path.join(process.cwd(), "scripts/scraper_cota_eveniment_superbet.py")
-    const outputFile = path.join(process.cwd(), "odds.csv")
+    const scriptPath = path.join(process.cwd(), "scripts", "scraper_cota_eveniment_superbet.py");
+    const outputFile = path.join(process.cwd(), "odds_superbet.csv")
 
     // First, ensure Python dependencies are installed
     try {
@@ -48,8 +48,7 @@ export async function POST(request: NextRequest) {
 
     // Run the scraper
     console.log(`Executing Superbet odds scraper for ${team1} vs ${team2}`)
-    const { stdout, stderr } = await execAsync(`python ${scriptPath} "${team1}" "${team2}" "${outputFile}"`)
-
+    const { stdout, stderr } = await execAsync(`python "${scriptPath}" "${team1}" "${team2}" "${outputFile}"`);
     if (stderr) {
       console.error(`Scraper error: ${stderr}`)
     }

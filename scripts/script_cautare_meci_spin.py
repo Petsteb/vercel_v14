@@ -151,8 +151,8 @@ def scrape_matches_with_odds(team_name1, team_name2, string_data, timeout=10, ch
                 
             # print(f"{formatted_dt} — {team1} vs {team2} | cote: 1={odds['1']}  X={odds['X']}  2={odds['2']}")
             if(formatted_dt == string_data and team1.lower() == team_name1.lower() and team2.lower() == team_name2.lower()):
-                print(f"⚽️ Meci găsit: {team1} vs {team2} la {formatted_dt} cu cote: 1={odds['1']}  X={odds['X']}  2={odds['2']}")
-                write_match_to_csv("odds.csv", formatted_dt, team1, team2, odds)
+                print(f"Meci găsit: {team1} vs {team2} la {formatted_dt} cu cote: 1={odds['1']}  X={odds['X']}  2={odds['2']}")
+                write_match_to_csv("odds_spin.csv", formatted_dt, team1, team2, odds)
                 return
     finally:
         driver.quit()
